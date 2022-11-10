@@ -3,7 +3,7 @@ import random
 
 
 
-class Wally(mesa.Agent):
+class EVA(mesa.Agent):
 
   def __init__(self, unique_id, model):
     super().__init__(unique_id, model)
@@ -21,11 +21,11 @@ class Wally(mesa.Agent):
 
     cell = self.model.grid.get_cell_list_contents([self.pos])
     for i in cell:
-      if type(i) == Trash and i.cantidad == True:
+      if type(i) == Basura and i.cantidad == True:
         self.model.grid.remove_agent(i)
         self.wealth += 1
 
-class Trash(mesa.Agent):
+class Basura(mesa.Agent):
 
   def __init__(self, unique_id, model):
     super().__init__(unique_id, model)
@@ -47,12 +47,12 @@ class Modelo(mesa.Model):
 
     
     for i in range(self.num):
-      wally2 = Wally(i, self)
-      self.schedule.add(wally2)
-      self.grid.place_agent(wally2, (1, 1))
+      EVA2 = EVA(i, self)
+      self.schedule.add(EVA2)
+      self.grid.place_agent(EVA2, (1, 1))
 
     for i in range(self.num2):
-      basura = Trash(self.num + i, self)
+      basura = Basura(self.num + i, self)
       self.schedule.add(basura)
       x = random.randint(0, 9)
       y = random.randint(0, 9)
@@ -80,14 +80,14 @@ def agent_port(agent):
   portrayal = {
     "Shape": "circle",
     "Filled": "true",
-    "Layer": "Act Aspiradora",
-    "Color": "red",
+    "Layer": "Aspiradora",
+    "Color": "green",
     "r": 0.5,
   }
 
-  if type(agent) == Trash:
+  if type(agent) == Basura:
 
-    portrayal["Color"] = "green"
+    portrayal["Color"] = "purple"
 
   return portrayal
 
@@ -98,10 +98,10 @@ chart = mesa.visualization.ChartModule([{
   "Color": "Black"
 }],
                                        data_collector_name='datacollector')
-server = mesa.visualization.ModularServer(Modelo, [grid, chart], "Act Aspiradora",
+server = mesa.visualization.ModularServer(Modelo, [grid, chart], "Aspiradora",
                                           {
-                                            "N": 7,
-                                            "T": 58
+                                            "N": 20,
+                                            "T": 15
                                           })
 
 server.port = 8522
